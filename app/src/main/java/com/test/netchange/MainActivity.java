@@ -1,6 +1,9 @@
 package com.test.netchange;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.widget.Button;
 import com.github.networkchange.NetChangeManager;
 import com.github.networkchange.NetChangerListener;
 import com.github.networkchange.NetType;
+import com.github.networkchange.NetworkCallbackImp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bt = findViewById(R.id.bt);
+//        init();
 
         NetChangeManager.get().register(this);
 
@@ -52,6 +57,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,TestActivity.class));
             }
         });
+    }
+
+    private void init() {
+        ConnectivityManager systemService = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            NetworkCallbackImp imp = new NetworkCallbackImp();
+            NetworkRequest build = new NetworkRequest.Builder().build();
+            systemService.registerNetworkCallback(build,imp);
+        }
+
+
+        /*val cmgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            cmgr?.registerDefaultNetworkCallback(networkCallback)
+        } else {
+            cmgr?.registerNetworkCallback(request, networkCallback)
+        }*/
     }
 
     @Override
