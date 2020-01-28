@@ -6,7 +6,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,7 +23,6 @@ public class NetworkCallbackImp extends ConnectivityManager.NetworkCallback {
     @Override
     public void onAvailable(Network network) {
         atomicInteger.incrementAndGet();
-        NetChangeManager.get().onReceive();
     }
 
     @Override
@@ -32,10 +30,11 @@ public class NetworkCallbackImp extends ConnectivityManager.NetworkCallback {
         if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
             if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                 //wifi
-                Log.i("=====", "NetworkCallbackImp222=====wifi");
-            } else {
+                NetChangeManager.get().notifyNetChange(NetType.WIFI);
+            } else if(atomicInteger.get()==1) {
                 //mobile
-                Log.i("=====", "NetworkCallbackImp222=====gprs");
+                //如果wifi没有在数据之前开启，则提示
+                NetChangeManager.get().notifyNetChange(NetType.GPRS);
             }
         }
     }
@@ -50,12 +49,15 @@ public class NetworkCallbackImp extends ConnectivityManager.NetworkCallback {
 
     @Override
     public void onLost(Network network) {
-        NetChangeManager.get().onReceive();
         int value = atomicInteger.decrementAndGet();
+        /*如果数据流量和wifi都断开*/
         if (value == 0) {
-//            NetChangeManager.get().onReceive();
+            NetChangeManager.get().notifyNetChange(NetType.NONE);
+        } else if (value == 1 && NetworkUtils.getNetType(NetChangeManager.get().getContext()) != NetType.WIFI) {
+            /*检查wifi是否连接，如果没有，则断开的wifi*/
+            NetChangeManager.get().notifyNetChange(NetType.GPRS);
         } else {
-
+//            NetChangeManager.get().notifyNetChange(NetType.WIFI);
         }
     }
 

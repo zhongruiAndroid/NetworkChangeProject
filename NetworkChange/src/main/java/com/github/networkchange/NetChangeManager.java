@@ -9,6 +9,7 @@ import android.os.Build;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /***
  *   created by android on 2019/7/9
@@ -22,8 +23,10 @@ public class NetChangeManager {
     private IntentFilter intentFilter;
     private ConnectivityManager systemService;
     private NetworkCallbackImp imp;
+    private AtomicInteger netTypeInteger;
 
     private NetChangeManager() {
+        netTypeInteger = new AtomicInteger();
         initMap();
         netStateReceiver = new NetStateReceiver();
     }
@@ -45,7 +48,7 @@ public class NetChangeManager {
         return netChangeManager;
     }
 
-    public Context getContext() {
+    protected Context getContext() {
         return context;
     }
 
@@ -104,7 +107,7 @@ public class NetChangeManager {
         }
     }
 
-    public void onReceive() {
+    protected void onReceive() {
         if (NetworkUtils.isNetworkAvailable(getContext())) {
             int netType = NetworkUtils.getNetType(getContext());
             notifyNetChange(netType);
@@ -125,7 +128,8 @@ public class NetChangeManager {
         concurrentMap.remove(object);
     }
 
-    private void notifyNetChange(int netType) {
+    protected void notifyNetChange(int netType) {
+        netTypeInteger.set(netType);
         if (concurrentMap == null) {
             return;
         }
@@ -140,5 +144,9 @@ public class NetChangeManager {
                 listener.onDisConnect();
             }
         }
+    }
+
+    public int getCurrentNetType() {
+        return netTypeInteger.get();
     }
 }

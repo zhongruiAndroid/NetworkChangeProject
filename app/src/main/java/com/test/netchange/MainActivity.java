@@ -1,7 +1,6 @@
 package com.test.netchange;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkRequest;
 import android.os.Bundle;
@@ -31,16 +30,14 @@ public class MainActivity extends AppCompatActivity {
         NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
             @Override
             public void onConnect(int netType) {
-                Log.i("=====","====MainActivity=onConnect"+netType);
                 switch (netType){
-                    case NetType.NONE:
-                        bt.setText("NONE");
-                        break;
                     case NetType.GPRS:
                         bt.setText("GPRS");
+                        Log.i("=====","====MainActivity=onConnect==GPRS"+netType);
                         break;
                     case NetType.WIFI:
                         bt.setText("WIFI");
+                        Log.i("=====","====MainActivity=onConnect==WIFI"+netType);
                         break;
                 }
             }
@@ -54,7 +51,19 @@ public class MainActivity extends AppCompatActivity {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,TestActivity.class));
+                int currentNetType = NetChangeManager.get().getCurrentNetType();
+//                startActivity(new Intent(MainActivity.this,TestActivity.class));
+                switch (NetChangeManager.get().getCurrentNetType()){
+                    case NetType.GPRS:
+                        Log.i("=====","====MainActivity=getCurrentNetType====GPRS");
+                    break;
+                    case NetType.WIFI:
+                        Log.i("=====","====MainActivity=getCurrentNetType====WIFI");
+                    break;
+                    case NetType.NONE:
+                        Log.i("=====","====MainActivity=getCurrentNetType====NONE");
+                    break;
+                }
             }
         });
     }
