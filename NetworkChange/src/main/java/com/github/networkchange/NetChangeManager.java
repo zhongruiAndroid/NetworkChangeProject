@@ -67,6 +67,10 @@ public class NetChangeManager {
     }
 
     private void setInterface(Context context) {
+        if(systemService!=null){
+            //防止重复注册
+            return;
+        }
         systemService = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (systemService != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             imp = new NetworkCallbackImp();

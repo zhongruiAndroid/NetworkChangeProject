@@ -1,8 +1,5 @@
 package com.test.netchange;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,38 +9,41 @@ import android.widget.Button;
 import com.github.networkchange.NetChangeManager;
 import com.github.networkchange.NetChangerListener;
 import com.github.networkchange.NetType;
-import com.github.networkchange.NetworkCallbackImp;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button bt;
+    private Button btText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bt = findViewById(R.id.bt);
-//        init();
+        btText = findViewById(R.id.btText);
 
+        /*使用之前注册一次*/
         NetChangeManager.get().register(this);
 
+        /*添加网络监听*/
         NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
             @Override
             public void onConnect(int netType) {
                 switch (netType){
                     case NetType.GPRS:
-                        bt.setText("GPRS");
+                        btText.setText("监听当前网络:GPRS");
                         Log.i("=====","====MainActivity=onConnect==GPRS"+netType);
+
                         break;
                     case NetType.WIFI:
-                        bt.setText("WIFI");
+                        btText.setText("监听当前网络:WIFI");
                         Log.i("=====","====MainActivity=onConnect==WIFI"+netType);
                         break;
                 }
             }
             @Override
             public void onDisConnect() {
-                bt.setText("NONE");
+                btText.setText("监听当前网络:NONE");
                 Log.i("=====","====MainActivity=onConnect====NONE");
             }
         });
@@ -52,43 +52,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currentNetType = NetChangeManager.get().getCurrentNetType();
-//                startActivity(new Intent(MainActivity.this,TestActivity.class));
-                switch (NetChangeManager.get().getCurrentNetType()){
+                switch (currentNetType){
                     case NetType.GPRS:
                         Log.i("=====","====MainActivity=getCurrentNetType====GPRS");
+                        bt.setText("点击手动获取当前网络(GPRS)");
                     break;
                     case NetType.WIFI:
                         Log.i("=====","====MainActivity=getCurrentNetType====WIFI");
+                        bt.setText("点击手动获取当前网络(WIFI)");
                     break;
                     case NetType.NONE:
                         Log.i("=====","====MainActivity=getCurrentNetType====NONE");
+                        bt.setText("点击手动获取当前网络(NONE)");
                     break;
                 }
             }
         });
     }
 
-    private void init() {
-        ConnectivityManager systemService = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            NetworkCallbackImp imp = new NetworkCallbackImp();
-            NetworkRequest build = new NetworkRequest.Builder().build();
-            systemService.registerNetworkCallback(build,imp);
-        }
-
-
-        /*val cmgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            cmgr?.registerDefaultNetworkCallback(networkCallback)
-        } else {
-            cmgr?.registerNetworkCallback(request, networkCallback)
-        }*/
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NetChangeManager.get().unRegister();
+        /*根据需求移除当前监听*/
+        NetChangeManager.get().removeNetChangeListener(this);
     }
 }

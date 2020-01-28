@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.util.Log;
 
 
 /***
@@ -22,7 +21,6 @@ public class NetStateReceiver extends BroadcastReceiver {
             return;
         }
         if (ANDROID_NET_CHANGE_ACTION.equalsIgnoreCase(intent.getAction())) {
-            Log.i("=====","=====onReceive");
             NetChangeManager.get().onReceive();
             return;
         }

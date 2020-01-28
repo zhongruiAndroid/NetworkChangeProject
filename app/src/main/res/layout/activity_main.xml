@@ -5,14 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/bt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="button"
+        android:text="点击手动获取当前网络"
         android:textAllCaps="false"
         />
 
+    <Button
+        android:id="@+id/btText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="监听当前网络:"
+        android:textAllCaps="false"
+        />
 </LinearLayout>
