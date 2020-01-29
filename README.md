@@ -1,4 +1,13 @@
 # NetworkChangeProject
+<!--|  [ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/NetworkChange/images/download.svg) ](https://11bintray.com/11zhongrui/mylibrary/NetworkC1hange/_latestVersion)  | 最新版本号|
+|--------|----|
+```gradle
+implementation 'com.github:NetworkChange:版本号'
+```-->
+
+## [Demo.apk下载](https://raw.githubusercontent.com/zhongruiAndroid/NetworkChangeProject/master/demo/demo.apk "apk文件")
+### demo.apk在demo目录下
+
 
 
 ### 使用之前注册
@@ -16,10 +25,10 @@ NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
     public void onConnect(int netType) {
         switch (netType){
             case NetType.GPRS:
-		        //数据流量
+		//数据流量
                 break;
             case NetType.WIFI:
-	            //wifi
+	        //wifi
                 break;
         }
     }
@@ -36,6 +45,7 @@ NetChangeManager.get().removeNetChangeListener(this);
 ```
 
 ### 手动获取当前网络状态
+### (必须要先注册 NetChangeManager.get().register(this))
 ```java
 int currentNetType = NetChangeManager.get().getCurrentNetType();
 /*数据流量*/
