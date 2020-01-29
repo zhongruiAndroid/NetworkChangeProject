@@ -38,7 +38,7 @@ NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
 NetChangeManager.get().removeNetChangeListener(this);
 ```
 
-### 手动获取当前网络状态
+### 手动获取当前网络状态(必须要先注册 NetChangeManager.get().register(this))
 ```java
 int currentNetType = NetChangeManager.get().getCurrentNetType();
 /*数据流量*/
