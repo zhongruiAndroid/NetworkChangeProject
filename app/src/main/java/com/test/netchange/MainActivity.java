@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         bt = findViewById(R.id.bt);
         btText = findViewById(R.id.btText);
 
-        /*使用之前注册一次*/
+        /*使用之前注册一次,可以写在application中*/
         NetChangeManager.get().register(this);
 
         /*添加网络监听*/
