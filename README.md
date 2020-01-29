@@ -45,7 +45,8 @@ NetChangeManager.get().removeNetChangeListener(this);
 ```
 
 ### 手动获取当前网络状态
-### (必须要先注册 NetChangeManager.get().register(this))
+### 必须要先注册 NetChangeManager.get().register(this)
+#### 如果注册之后,马上手动获取,是无法获取正确状态的,建议在application中注册
 ```java
 int currentNetType = NetChangeManager.get().getCurrentNetType();
 /*数据流量*/
