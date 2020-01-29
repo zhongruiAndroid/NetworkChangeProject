@@ -4,6 +4,12 @@
 ```gradle
 implementation 'com.github:NetworkChange:版本号'
 ```-->
+
+## [Demo.apk下载](https://raw.githubusercontent.com/zhongruiAndroid/NetworkChangeProject/master/demo/demo.apk "apk文件")
+### demo.apk在demo目录下
+
+
+
 ### 使用之前注册
 ```java
 /*使用之前注册一次*/
