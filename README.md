@@ -1,9 +1,9 @@
 # NetworkChangeProject
-|  [ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/NetworkChange/images/download.svg) ](https://11bintray.com/11zhongrui/mylibrary/NetworkC1hange/_latestVersion)  | 最新版本号|
+<!--|  [ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/NetworkChange/images/download.svg) ](https://11bintray.com/11zhongrui/mylibrary/NetworkC1hange/_latestVersion)  | 最新版本号|
 |--------|----|
 ```gradle
 implementation 'com.github:NetworkChange:版本号'
-```
+```-->
 ### 使用之前注册
 ```java
 /*使用之前注册一次*/
@@ -38,7 +38,8 @@ NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
 NetChangeManager.get().removeNetChangeListener(this);
 ```
 
-### 手动获取当前网络状态(必须要先注册 NetChangeManager.get().register(this))
+### 手动获取当前网络状态
+### (必须要先注册 NetChangeManager.get().register(this))
 ```java
 int currentNetType = NetChangeManager.get().getCurrentNetType();
 /*数据流量*/
