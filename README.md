@@ -1,9 +1,9 @@
 # NetworkChangeProject
-<!--|  [ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/NetworkChange/images/download.svg) ](https://11bintray.com/11zhongrui/mylibrary/NetworkC1hange/_latestVersion)  | 最新版本号|
+|  [ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/NetworkChange/images/download.svg) ](https://11bintray.com/11zhongrui/mylibrary/NetworkC1hange/_latestVersion)  | 最新版本号|
 |--------|----|
 ```gradle
 implementation 'com.github:NetworkChange:版本号'
-```-->
+```
 
 ## [Demo.apk下载](https://raw.githubusercontent.com/zhongruiAndroid/NetworkChangeProject/master/demo/demo.apk "apk文件")
 ### demo.apk在demo目录下
