@@ -32,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (netType){
                     case NetType.GPRS:
                         btText.setText("监听当前网络:GPRS");
+                        bt.setText("点击手动获取当前网络");
                         Log.i("=====","====MainActivity=onConnect==GPRS"+netType);
 
                         break;
                     case NetType.WIFI:
                         btText.setText("监听当前网络:WIFI");
+                        bt.setText("点击手动获取当前网络");
                         Log.i("=====","====MainActivity=onConnect==WIFI"+netType);
                         break;
                 }
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDisConnect() {
                 btText.setText("监听当前网络:NONE");
+                bt.setText("点击手动获取当前网络");
                 Log.i("=====","====MainActivity=onConnect====NONE");
             }
         });
