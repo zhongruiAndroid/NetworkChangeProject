@@ -1,6 +1,9 @@
 # NetworkChangeProject
-
-
+|  [ ![Download](https://api.bintray.com/packages/zhongrui/mylibrary/NetworkChange/images/download.svg) ](https://11bintray.com/11zhongrui/mylibrary/NetworkC1hange/_latestVersion)  | 最新版本号|
+|--------|----|
+```gradle
+implementation 'com.github:NetworkChange:版本号'
+```
 ### 使用之前注册
 ```java
 /*使用之前注册一次*/
@@ -16,10 +19,10 @@ NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
     public void onConnect(int netType) {
         switch (netType){
             case NetType.GPRS:
-		        //数据流量
+		//数据流量
                 break;
             case NetType.WIFI:
-	            //wifi
+	        //wifi
                 break;
         }
     }
