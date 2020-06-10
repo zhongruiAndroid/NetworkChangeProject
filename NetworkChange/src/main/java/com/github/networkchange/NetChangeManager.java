@@ -16,13 +16,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NetChangeManager {
     private static NetChangeManager netChangeManager;
+    public static NetChangeManager get() {
+        if (netChangeManager == null) {
+            synchronized (NetChangeManager.class) {
+                if (netChangeManager == null) {
+                    netChangeManager = new NetChangeManager();
+                }
+            }
+        }
+        return netChangeManager;
+    }
 
     private Context context;
     private NetStateReceiver netStateReceiver;
     private Map<Object, NetChangerListener> concurrentMap;
     private IntentFilter intentFilter;
-    private ConnectivityManager systemService;
-    private NetworkCallbackImp imp;
     private AtomicInteger netTypeInteger;
 
     private NetChangeManager() {
@@ -37,16 +45,6 @@ public class NetChangeManager {
         }
     }
 
-    public static NetChangeManager get() {
-        if (netChangeManager == null) {
-            synchronized (NetChangeManager.class) {
-                if (netChangeManager == null) {
-                    netChangeManager = new NetChangeManager();
-                }
-            }
-        }
-        return netChangeManager;
-    }
 
     protected Context getContext() {
         return context;
@@ -58,28 +56,11 @@ public class NetChangeManager {
         }
         this.context = context;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setInterface(context);
-        } else {
-            setBroadcast();
-        }
+        setBroadcast();
 
     }
 
-    private void setInterface(Context context) {
-        if(systemService!=null){
-            //防止重复注册
-            return;
-        }
-        systemService = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (systemService != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            imp = new NetworkCallbackImp();
-            NetworkRequest build = new NetworkRequest.Builder().build();
-            systemService.registerNetworkCallback(build, imp);
-        } else {
-            setBroadcast();
-        }
-    }
+
 
     private void setBroadcast() {
         if (intentFilter == null) {
@@ -89,21 +70,10 @@ public class NetChangeManager {
     }
 
     public void unRegister() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            unRegisterInterface();
-        } else {
-            unRegisterBroadcast();
-        }
-
+        unRegisterBroadcast();
     }
 
-    private void unRegisterInterface() {
-        if (systemService != null && imp != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            systemService.unregisterNetworkCallback(imp);
-        } else {
-            unRegisterBroadcast();
-        }
-    }
+
 
     private void unRegisterBroadcast() {
         if (context != null && netStateReceiver != null) {
