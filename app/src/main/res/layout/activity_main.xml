@@ -23,4 +23,17 @@
         android:text="监听当前网络:"
         android:textAllCaps="false"
         />
+    <Button
+        android:id="@+id/btClearText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="清除log"
+        />
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        />
 </LinearLayout>
