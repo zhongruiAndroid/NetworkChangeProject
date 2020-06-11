@@ -5,57 +5,71 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.util.Pair;
+
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class NetworkUtils {
 
 
     public static boolean isNetworkAvailable(Context context) {
-        if (context == null) {
-            return false;
-        }
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connMgr == null) {
-            return false;
-        }
-        // 返回所有网络信息
-        NetworkInfo[] info = connMgr.getAllNetworkInfo();
-        if (info != null) {
-            for (NetworkInfo anInfo : info) {
-                if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        int netType = getNetType(context);
+        return netType != NetType.NONE;
     }
 
     public static int getNetType(Context context) {
-        ConnectivityManager connMgr;
-        if (context != null) {
-            connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        } else if (NetChangeManager.get().getContext() != null) {
-            connMgr = (ConnectivityManager) NetChangeManager.get().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        } else {
+        if (context == null) {
             return NetType.NONE;
         }
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr == null) {
             return NetType.NONE;
         }
-        // 获取当前激活的网络连接信息
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo == null) {
-            return NetType.NONE;
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //获取WIFI连接的信息
+            NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            //获取移动数据连接的信息
+            NetworkInfo mobileNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (wifiNetworkInfo!=null&&wifiNetworkInfo.isConnected()) {
+                return NetType.WIFI;
+            } else if (mobileNetworkInfo!=null&&mobileNetworkInfo.isConnected()) {
+                return NetType.MOBILE;
+            } else {
+                return NetType.NONE;
+            }
+        } else {
+            //获取所有网络连接的信息
+            Network[] networks = connMgr.getAllNetworks();
+            int size = networks.length;
+            //通过循环将网络信息逐个取出来
+            Map<Integer, Boolean> map = new HashMap<>();
+            for (int i = 0; i < size; i++) {
+                //获取ConnectivityManager对象对应的NetworkInfo对象
+                NetworkInfo networkInfo = connMgr.getNetworkInfo(networks[i]);
+                if (networkInfo == null) {
+                    continue;
+                }
+                map.put(networkInfo.getType(), networkInfo.isConnected());
+            }
+            Boolean wifiState = map.get(ConnectivityManager.TYPE_WIFI);
+            Boolean mobileState = map.get(ConnectivityManager.TYPE_MOBILE);
+            if ((wifiState != null && wifiState)) {
+                return NetType.WIFI;
+            } else if ((mobileState != null && mobileState)) {
+                return NetType.MOBILE;
+            } else {
+                return NetType.NONE;
+            }
         }
-        int nType = networkInfo.getType();
-        if (nType == ConnectivityManager.TYPE_MOBILE) {
-            return NetType.GPRS;
-        } else if (nType == ConnectivityManager.TYPE_WIFI) {
-            return NetType.WIFI;
-        }
-        return NetType.NONE;
     }
+
 
     public static void openSetting(Context context, int requestCode) {
         Intent intent = new Intent("/");

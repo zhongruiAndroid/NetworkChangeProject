@@ -82,12 +82,7 @@ public class NetChangeManager {
     }
 
     protected void onReceive() {
-        if (NetworkUtils.isNetworkAvailable(getContext())) {
-            int netType = NetworkUtils.getNetType(getContext());
-            notifyNetChange(netType);
-        } else {
-            notifyNetChange(NetType.NONE);
-        }
+        notifyNetChange(NetworkUtils.getNetType(getContext()));
     }
 
     public void addNetChangeListener(Object object, NetChangerListener listener) {
@@ -103,6 +98,9 @@ public class NetChangeManager {
     }
 
     protected void notifyNetChange(int netType) {
+        if(netTypeInteger.get()==netType){
+            return;
+        }
         netTypeInteger.set(netType);
         if (concurrentMap == null) {
             return;

@@ -7,7 +7,7 @@ public interface NetType {
     /*无网络*/
     int NONE=0;
     /*数据流量*/
-    int GPRS=1;
+    int MOBILE=1;
     /*wifi*/
     int WIFI=2;
 }

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onConnect(int netType) {
                 switch (netType){
-                    case NetType.GPRS:
+                    case NetType.MOBILE:
                         btText.setText("监听当前网络:GPRS");
                         bt.setText("点击手动获取当前网络");
                         Log.i("=====","====MainActivity=onConnect==GPRS"+netType);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int currentNetType = NetChangeManager.get().getCurrentNetType();
                 switch (currentNetType){
-                    case NetType.GPRS:
+                    case NetType.MOBILE:
                         Log.i("=====","====MainActivity=getCurrentNetType====GPRS");
                         bt.setText("点击手动获取当前网络(GPRS)");
                         tvText.setText(tvText.getText()+"\nGPRS_click");
