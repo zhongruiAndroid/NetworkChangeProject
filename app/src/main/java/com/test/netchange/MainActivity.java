@@ -40,27 +40,28 @@ public class MainActivity extends AppCompatActivity {
         NetChangeManager.get().addNetChangeListener(this, new NetChangerListener() {
             @Override
             public void onConnect(int netType) {
-                switch (netType){
+                switch (netType) {
                     case NetType.MOBILE:
                         btText.setText("监听当前网络:GPRS");
                         bt.setText("点击手动获取当前网络");
-                        Log.i("=====","====MainActivity=onConnect==GPRS"+netType);
-                        tvText.setText(tvText.getText()+"\nGPRS");
+                        Log.i("=====", "====MainActivity=onConnect==GPRS" + netType);
+                        tvText.setText(tvText.getText() + "\nGPRS");
                         break;
                     case NetType.WIFI:
                         btText.setText("监听当前网络:WIFI");
                         bt.setText("点击手动获取当前网络");
-                        Log.i("=====","====MainActivity=onConnect==WIFI"+netType);
-                        tvText.setText(tvText.getText()+"\nWIFI");
+                        Log.i("=====", "====MainActivity=onConnect==WIFI" + netType);
+                        tvText.setText(tvText.getText() + "\nWIFI");
                         break;
                 }
             }
+
             @Override
             public void onDisConnect() {
                 btText.setText("监听当前网络:NONE");
                 bt.setText("点击手动获取当前网络");
-                Log.i("=====","====MainActivity=onConnect====NONE");
-                tvText.setText(tvText.getText()+"\nNONE");
+                Log.i("=====", "====MainActivity=onConnect====NONE");
+                tvText.setText(tvText.getText() + "\nNONE");
             }
         });
 
@@ -68,22 +69,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int currentNetType = NetChangeManager.get().getCurrentNetType();
-                switch (currentNetType){
+                switch (currentNetType) {
                     case NetType.MOBILE:
-                        Log.i("=====","====MainActivity=getCurrentNetType====GPRS");
+                        Log.i("=====", "====MainActivity=getCurrentNetType====GPRS");
                         bt.setText("点击手动获取当前网络(GPRS)");
-                        tvText.setText(tvText.getText()+"\nGPRS_click");
-                    break;
+                        tvText.setText(tvText.getText() + "\nGPRS_click");
+                        break;
                     case NetType.WIFI:
-                        Log.i("=====","====MainActivity=getCurrentNetType====WIFI");
+                        Log.i("=====", "====MainActivity=getCurrentNetType====WIFI");
                         bt.setText("点击手动获取当前网络(WIFI)");
-                        tvText.setText(tvText.getText()+"\nWIFI_click");
-                    break;
+                        tvText.setText(tvText.getText() + "\nWIFI_click");
+                        break;
                     case NetType.NONE:
-                        Log.i("=====","====MainActivity=getCurrentNetType====NONE");
+                        Log.i("=====", "====MainActivity=getCurrentNetType====NONE");
                         bt.setText("点击手动获取当前网络(NONE)");
-                        tvText.setText(tvText.getText()+"\nNONE_click");
-                    break;
+                        tvText.setText(tvText.getText() + "\nNONE_click");
+                        break;
                 }
             }
         });

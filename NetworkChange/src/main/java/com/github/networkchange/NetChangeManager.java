@@ -5,6 +5,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkRequest;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.Collection;
 import java.util.Map;
@@ -16,6 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NetChangeManager {
     private static NetChangeManager netChangeManager;
+    private Handler handler;
+
     public static NetChangeManager get() {
         if (netChangeManager == null) {
             synchronized (NetChangeManager.class) {
@@ -32,6 +36,7 @@ public class NetChangeManager {
     private Map<Object, NetChangerListener> concurrentMap;
     private IntentFilter intentFilter;
     private AtomicInteger netTypeInteger;
+    private long delayTime=0;
 
     private NetChangeManager() {
         netTypeInteger = new AtomicInteger();
@@ -45,6 +50,12 @@ public class NetChangeManager {
         }
     }
 
+    public void setDelayTime(long delayTimeMillis) {
+        if(delayTimeMillis<0){
+            delayTimeMillis=0;
+        }
+        this.delayTime = delayTimeMillis;
+    }
 
     protected Context getContext() {
         return context;
@@ -72,9 +83,6 @@ public class NetChangeManager {
     public void unRegister() {
         unRegisterBroadcast();
     }
-
-
-
     private void unRegisterBroadcast() {
         if (context != null && netStateReceiver != null) {
             context.unregisterReceiver(netStateReceiver);
@@ -82,9 +90,25 @@ public class NetChangeManager {
     }
 
     protected void onReceive() {
-        notifyNetChange(NetworkUtils.getNetType(getContext()));
+        int netType = NetworkUtils.getNetType(getContext());
+        if(delayTime>0&&netType==NetType.NONE){
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    int netType = NetworkUtils.getNetType(getContext());
+                    notifyNetChange(netType);
+                }
+            },delayTime);
+        }else{
+            notifyNetChange(netType);
+        }
     }
-
+    private Handler getHandler(){
+        if(handler==null){
+            handler = new Handler(Looper.getMainLooper());
+        }
+        return handler;
+    }
     public void addNetChangeListener(Object object, NetChangerListener listener) {
         initMap();
         this.concurrentMap.put(object, listener);

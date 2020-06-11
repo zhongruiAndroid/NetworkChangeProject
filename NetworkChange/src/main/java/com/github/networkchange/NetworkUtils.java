@@ -7,10 +7,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
-import android.util.Log;
-import android.util.Pair;
-
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +33,9 @@ public class NetworkUtils {
             NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             //获取移动数据连接的信息
             NetworkInfo mobileNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            if (wifiNetworkInfo!=null&&wifiNetworkInfo.isConnected()) {
+            if (wifiNetworkInfo != null && wifiNetworkInfo.isConnected()) {
                 return NetType.WIFI;
-            } else if (mobileNetworkInfo!=null&&mobileNetworkInfo.isConnected()) {
+            } else if (mobileNetworkInfo != null && mobileNetworkInfo.isConnected()) {
                 return NetType.MOBILE;
             } else {
                 return NetType.NONE;
@@ -69,16 +65,5 @@ public class NetworkUtils {
             }
         }
     }
-
-
-    public static void openSetting(Context context, int requestCode) {
-        Intent intent = new Intent("/");
-        ComponentName cm = new ComponentName("com.android.settings",
-                "com.android.settings.WirelessSettings");
-        intent.setComponent(cm);
-        intent.setAction("android.intent.action.VIEW");
-        ((Activity) context).startActivityForResult(intent, requestCode);
-    }
-
 }
 
