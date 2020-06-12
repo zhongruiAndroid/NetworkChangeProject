@@ -39,7 +39,7 @@ public class NetChangeManager {
     private long delayTime=0;
 
     private NetChangeManager() {
-        netTypeInteger = new AtomicInteger();
+        netTypeInteger = new AtomicInteger(-1);
         initMap();
         netStateReceiver = new NetStateReceiver();
     }
