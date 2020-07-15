@@ -117,7 +117,7 @@ public class NetChangeManager {
     }
 
     public boolean isAddNetChangeListener(Object object) {
-        if (concurrentMap == null) {
+        if (concurrentMap == null||object==null) {
             return false;
         }
         return this.concurrentMap.get(object) != null;
