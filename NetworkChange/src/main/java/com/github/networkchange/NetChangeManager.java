@@ -36,7 +36,7 @@ public class NetChangeManager {
     private Map<Object, NetChangerListener> concurrentMap;
     private IntentFilter intentFilter;
     private AtomicInteger netTypeInteger;
-    private long delayTime=0;
+    private long delayTime = 0;
 
     private NetChangeManager() {
         netTypeInteger = new AtomicInteger(-1);
@@ -51,8 +51,8 @@ public class NetChangeManager {
     }
 
     public void setDelayTime(long delayTimeMillis) {
-        if(delayTimeMillis<0){
-            delayTimeMillis=0;
+        if (delayTimeMillis < 0) {
+            delayTimeMillis = 0;
         }
         this.delayTime = delayTimeMillis;
     }
@@ -72,7 +72,6 @@ public class NetChangeManager {
     }
 
 
-
     private void setBroadcast() {
         if (intentFilter == null) {
             intentFilter = new IntentFilter(NetStateReceiver.ANDROID_NET_CHANGE_ACTION);
@@ -83,6 +82,7 @@ public class NetChangeManager {
     public void unRegister() {
         unRegisterBroadcast();
     }
+
     private void unRegisterBroadcast() {
         if (context != null && netStateReceiver != null) {
             context.unregisterReceiver(netStateReceiver);
@@ -91,27 +91,36 @@ public class NetChangeManager {
 
     protected void onReceive() {
         int netType = NetworkUtils.getNetType(getContext());
-        if(delayTime>0&&netType==NetType.NONE){
+        if (delayTime > 0 && netType == NetType.NONE) {
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     int netType = NetworkUtils.getNetType(getContext());
                     notifyNetChange(netType);
                 }
-            },delayTime);
-        }else{
+            }, delayTime);
+        } else {
             notifyNetChange(netType);
         }
     }
-    private Handler getHandler(){
-        if(handler==null){
+
+    private Handler getHandler() {
+        if (handler == null) {
             handler = new Handler(Looper.getMainLooper());
         }
         return handler;
     }
+
     public void addNetChangeListener(Object object, NetChangerListener listener) {
         initMap();
         this.concurrentMap.put(object, listener);
+    }
+
+    public boolean isAddNetChangeListener(Object object) {
+        if (concurrentMap == null) {
+            return false;
+        }
+        return this.concurrentMap.get(object) != null;
     }
 
     public void removeNetChangeListener(Object object) {
@@ -122,7 +131,7 @@ public class NetChangeManager {
     }
 
     protected void notifyNetChange(int netType) {
-        if(netTypeInteger.get()==netType){
+        if (netTypeInteger.get() == netType) {
             return;
         }
         netTypeInteger.set(netType);
