@@ -43,6 +43,9 @@ public class NetworkUtils {
         } else {
             //获取所有网络连接的信息
             Network[] networks = connMgr.getAllNetworks();
+            if (networks==null) {
+                return NetType.NONE;
+            }
             int size = networks.length;
             //通过循环将网络信息逐个取出来
             Map<Integer, Boolean> map = new HashMap<>();
