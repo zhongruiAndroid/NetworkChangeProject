@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.5.3'
 
         /***************发布aar包的配置**********************/
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
